@@ -24,4 +24,13 @@ describe('.. ',()=>{
         cy.wait('@getHome').its('response.statusCode').should('eq', 200);
     })
 
+    it.only("verify if 'keep-alive' is included in the request headers",()=>{
+        cy.intercept('GET','https://www.superprof.com.ar/a/getSubjects/**').as('getSubjects')
+        home.search('Clases de ingles')
+        cy.wait('@getSubjects').then(({ request }) => {
+            expect(request.headers['connection']).to.equal('keep-alive');
+        });
+    })
+    
+
 })
