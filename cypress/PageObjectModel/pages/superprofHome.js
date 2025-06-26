@@ -10,9 +10,14 @@ class superprofHome{
         return cy.contains('button', 'Buscar')
     }
 
-    
+    subjectsContainerNext(){
+        return cy.get('.chevron').eq(1)
+    }
 
-    
+    bateriaSubject(){
+        return cy.get('[data-search="Pintura"]')
+    }
+
     //Comportamientos
     navigateToHome(){
         cy.visit('https://www.superprof.com.ar')
@@ -21,6 +26,10 @@ class superprofHome{
     search(toSearch){
         this.searchBox().click().type(toSearch)
         this.searchButton().click()
+    }
+
+    nextClickNavbar(){
+        this.subjectsContainerNext().click()
     }
 }
 

@@ -16,6 +16,33 @@ describe('.. ',()=>{
         results.mainTitle().should('have.text','Los profesores de inglés cerca de ti')
     })
 
+    it.only('Find Batería Subject on navbar', { scrollBehavior: false } ,() => {
+        function ensureElementVisible(maxRetries = 10) {
+          if (maxRetries === 0) {
+            throw new Error('No se encontró el elemento en viewport tras varios intentos');
+          }
+          home.bateriaSubject().then(($el) => {
+            const rect = $el[0].getBoundingClientRect();
+            const isInViewport =
+              rect.top >= 0 &&
+              rect.left >= 0 &&
+              rect.bottom <= Cypress.config("viewportHeight") &&
+              rect.right <= Cypress.config("viewportWidth");
+      
+            if (isInViewport) {
+              expect(isInViewport).to.be.true;
+            } else {
+              home.nextClickNavbar()
+              cy.wait(1000);
+              ensureElementVisible(maxRetries - 1);
+            }
+          });
+        }
+    
+        ensureElementVisible();
+    
+      });
+
 
     //API tests
     it("verify 200 code on homePage",()=>{
@@ -24,7 +51,7 @@ describe('.. ',()=>{
         cy.wait('@getHome').its('response.statusCode').should('eq', 200);
     })
 
-    it.only("verify if 'keep-alive' is included in the request headers",()=>{
+    it("verify if 'keep-alive' is included in the request headers",()=>{
         cy.intercept('GET','https://www.superprof.com.ar/a/getSubjects/**').as('getSubjects')
         home.search('Clases de ingles')
         cy.wait('@getSubjects').then(({ request }) => {
