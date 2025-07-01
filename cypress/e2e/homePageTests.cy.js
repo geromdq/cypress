@@ -16,13 +16,14 @@ describe('.. ',()=>{
         results.mainTitle().should('have.text','Los profesores de inglés cerca de ti')
     })
 
-    it.only('Find Batería Subject on navbar', { scrollBehavior: false } ,() => {
+   /* it.only('Find Batería Subject on navbar', { scrollBehavior: false } ,() => {
         function ensureElementVisible(maxRetries = 10) {
           if (maxRetries === 0) {
             throw new Error('No se encontró el elemento en viewport tras varios intentos');
           }
           home.bateriaSubject().then(($el) => {
             const rect = $el[0].getBoundingClientRect();
+        
             const isInViewport =
               rect.top >= 0 &&
               rect.left >= 0 &&
@@ -33,15 +34,44 @@ describe('.. ',()=>{
               expect(isInViewport).to.be.true;
             } else {
               home.nextClickNavbar()
-              cy.wait(1000);
-              ensureElementVisible(maxRetries - 1);
+              cy.wait(3000).then(() => {
+                ensureElementVisible(maxRetries - 1);
+              });
             }
           });
         }
     
         ensureElementVisible();
-    
-      });
+      });*/
+
+      it.only('Encuentra el Subject Bajo en el navbar haciendo scroll dinámico', () => {
+        cy.viewport(1920, 1080);
+  function scrollUntilVisible(maxTries = 10) {
+    if (maxTries === 0) {
+      throw new Error('No se encontró el elemento tras varios intentos');
+    }
+
+    cy.get('body').then(($body) => {
+      if ($body.find('[data-search="Bajo"]').length) {
+        // El elemento ya está en el DOM
+        cy.get('[data-search="Bajo"]')
+          .scrollIntoView({ block: 'nearest'})
+          .wait(3000)
+          .should('be.visible')
+          .click();
+      } else {
+        // El elemento todavía no está en el DOM, hacemos click en la flecha
+        home.nextClickNavbar();
+        cy.wait(500).then(() => {
+          scrollUntilVisible(maxTries - 1);
+        });
+      }
+    });
+  }
+
+  scrollUntilVisible();
+});
+
 
 
     //API tests

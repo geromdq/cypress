@@ -15,7 +15,7 @@ class superprofHome{
     }
 
     bateriaSubject(){
-        return cy.get('[data-search="Pintura"]')
+        return cy.get('[data-search="Bajo"]')
     }
 
     //Comportamientos
