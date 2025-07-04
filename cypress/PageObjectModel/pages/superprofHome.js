@@ -14,7 +14,7 @@ class superprofHome{
         return cy.get('.chevron').eq(1)
     }
 
-    bateriaSubject(){
+    bajoSubject(){
         return cy.get('[data-search="Bajo"]')
     }
 
