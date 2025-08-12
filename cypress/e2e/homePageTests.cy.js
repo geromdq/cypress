@@ -1,5 +1,6 @@
 import superprofHome from "../PageObjectModel/pages/superprofHome"
 import superprofResults from "../PageObjectModel/pages/superprofResults"
+import navbar from '../PageObjectModel/components/navbar'
 
 const home = new superprofHome
 const results = new superprofResults
@@ -16,7 +17,23 @@ describe('.. ', () => {
     results.mainTitle().should('have.text', 'Los profesores de inglés cerca de ti')
   })
 
-  it.only('Encuentra el Subject Bajo en el navbar haciendo scroll dinámico', () => {
+
+  it('Find Bajo on navbar', () => {
+    cy.viewport(1920, 1080);
+    cy.scrollTo('top');
+    navbar.scrollToAndClickItem('Bajo');
+  });
+
+  it.only('login with valid credentials ', () => {
+    const email = Cypress.env('username');
+    const password = Cypress.env('password');
+    home.login(email,password)
+  });
+
+
+
+})
+ /* it.only('Encuentra el Subject "Bajo" en el navbar haciendo scroll dinámico', () => {
     cy.viewport(1920, 1080);
     function scrollUntilVisible(maxTries = 10) {
       if (maxTries === 0) {
@@ -60,6 +77,5 @@ describe('.. ', () => {
       expect(request.headers['connection']).to.equal('keep-alive');
     });
   })
+*/
 
-
-})

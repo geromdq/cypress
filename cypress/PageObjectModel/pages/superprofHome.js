@@ -18,6 +18,22 @@ class superprofHome{
         return cy.get('[data-search="Bajo"]')
     }
 
+    conectateForm(){
+        return cy.get('button.basic-header-button').click()
+    }
+
+    emailField(){
+        return cy.get('[name="username"]')
+    }
+
+    passwordField(){
+        return cy.get('[name="password"]')
+    }
+
+     submitButtonLogin(){
+        return cy.get('[type="submit"]')
+    }
+
     //Comportamientos
     navigateToHome(){
         cy.visit('https://www.superprof.com.ar')
@@ -30,6 +46,14 @@ class superprofHome{
 
     nextClickNavbar(){
         this.subjectsContainerNext().click()
+    }
+
+    login(email,password) {
+        this.conectateForm().click()
+        this.emailField.type    
+        this.submitButtonLogin().click()
+         this.passwordField.type    
+        this.submitButtonLogin().click()
     }
 }
 
