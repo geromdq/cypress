@@ -1,25 +1,17 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('clickConectate', () => {
+  cy.contains('button.basic-header-button.caption', /^Conectate$/)
+    .filter(':visible')
+    .scrollIntoView({ block: 'center' })
+    .then($btn => {
+      const el = $btn[0];
+
+      // Intento Cypress
+      cy.wrap($btn).click({ force: true }).focus().type('{enter}');
+
+      // Fallback nativo
+      cy.window().then(win => {
+        el.dispatchEvent(new win.MouseEvent('click', { bubbles: true, cancelable: true, view: win }));
+        el.click();
+      });
+    });
+});

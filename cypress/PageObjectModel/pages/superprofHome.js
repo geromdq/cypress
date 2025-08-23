@@ -19,11 +19,11 @@ class superprofHome{
     }
 
     conectateForm(){
-        return cy.get('button.basic-header-button').click()
+         return cy.contains('Conectate') 
     }
 
     emailField(){
-        return cy.get('[name="username"]')
+        return cy.xpath('//*[@id="signin-form"]/div/div[1]/input')
     }
 
     passwordField(){
@@ -31,7 +31,7 @@ class superprofHome{
     }
 
      submitButtonLogin(){
-        return cy.get('[type="submit"]')
+        return cy.contains('Conectate').should('be.visible')
     }
 
     //Comportamientos
@@ -48,12 +48,14 @@ class superprofHome{
         this.subjectsContainerNext().click()
     }
 
-    login(email,password) {
-        this.conectateForm().click()
-        this.emailField.type    
-        this.submitButtonLogin().click()
-         this.passwordField.type    
-        this.submitButtonLogin().click()
+    login(email, password) {
+        cy.clickConectate()
+        this.emailField().type(email)
+        this.emailField().type('{enter}')
+        this.passwordField().type(password)
+        this.passwordField().type('{enter}')
+
+
     }
 }
 
