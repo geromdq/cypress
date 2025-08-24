@@ -54,8 +54,6 @@ class superprofHome{
         this.emailField().type('{enter}')
         this.passwordField().type(password)
         this.passwordField().type('{enter}')
-
-
     }
 }
 
