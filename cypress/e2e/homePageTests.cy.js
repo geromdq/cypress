@@ -4,11 +4,40 @@ import navbar from '../PageObjectModel/components/navbar'
 
 const home = new superprofHome
 const results = new superprofResults
-describe('.. ', () => {
+describe('Home Page Tests', () => {
 
   beforeEach("Navigate to home", () => {
     home.navigateToHome()
   })
+
+
+ //Login tests
+  describe('Login tests', () => {
+    beforeEach(() => {
+      cy.intercept('POST', '/api/v3/token/').as('login');
+    });
+   
+    it('login ok and response is 200 ', () => {
+      cy.intercept('POST', '/api/v3/token/').as('login');
+      const email = Cypress.env('username');
+      const password = Cypress.env('password');
+
+      home.login(email, password)
+      cy.wait('@login').then(({ response }) => {
+        expect(response.statusCode).to.eq(200);
+      });
+    });
+
+    it.only('login fail and response is 400 or 401', () => {
+      cy.intercept('POST', '/api/v3/token').as('login')
+      const email = Cypress.env('username')
+      home.login(email, 'failpass123')
+      cy.wait('@login').then(({ response }) => {
+        expect(response.statusCode).to.eq(400,401);
+      });
+
+    });
+  });
 
 
   //Front end tests
@@ -24,58 +53,5 @@ describe('.. ', () => {
     navbar.scrollToAndClickItem('Bajo');
   });
 
-  it.only('login with valid credentials ', () => {
-    const email = Cypress.env('username');
-    const password = Cypress.env('password');
-    home.login(email,password)
-  });
-
-
 
 })
- /* it.only('Encuentra el Subject "Bajo" en el navbar haciendo scroll dinámico', () => {
-    cy.viewport(1920, 1080);
-    function scrollUntilVisible(maxTries = 10) {
-      if (maxTries === 0) {
-        throw new Error('No se encontró el elemento tras varios intentos');
-      }
-
-      cy.get('body').then(($body) => {
-        if ($body.find('[data-search="Bajo"]').length) {
-          // El elemento ya está en el DOM
-          cy.get('[data-search="Bajo"]')
-            .scrollIntoView({ block: 'nearest' })
-            .wait(3000)
-            .should('be.visible')
-            .click();
-        } else {
-          // El elemento todavía no está en el DOM, hacemos click en la flecha
-          home.nextClickNavbar();
-          cy.wait(500).then(() => {
-            scrollUntilVisible(maxTries - 1);
-          });
-        }
-      });
-    }
-
-    scrollUntilVisible();
-  });
-
-
-
-  //API tests
-  it("verify 200 code on homePage", () => {
-    cy.intercept('GET', '/').as('getHome')
-    home.navigateToHome()
-    cy.wait('@getHome').its('response.statusCode').should('eq', 200);
-  })
-
-  it("verify if 'keep-alive' is included in the request headers", () => {
-    cy.intercept('GET', 'https://www.superprof.com.ar/a/getSubjects/**').as('getSubjects')
-    home.search('Clases de ingles')
-    cy.wait('@getSubjects').then(({ request }) => {
-      expect(request.headers['connection']).to.equal('keep-alive');
-    });
-  })
-*/
-
