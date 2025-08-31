@@ -7,33 +7,33 @@ const results = new superprofResults
 describe('Home Page Tests', () => {
 
   beforeEach("Navigate to home", () => {
+    cy.acceptCookies()
     home.navigateToHome()
   })
 
+  const EMAIL = Cypress.env('username');
 
- //Login tests
+  //Login tests
   describe('Login tests', () => {
     beforeEach(() => {
       cy.intercept('POST', '/api/v3/token/').as('login');
     });
-   
+
     it('login ok and response is 200 ', () => {
-      cy.intercept('POST', '/api/v3/token/').as('login');
-      const email = Cypress.env('username');
+     // const email = Cypress.env('username');
       const password = Cypress.env('password');
 
-      home.login(email, password)
+      home.login(EMAIL, password)
       cy.wait('@login').then(({ response }) => {
         expect(response.statusCode).to.eq(200);
       });
     });
 
-    it.only('login fail and response is 400 or 401', () => {
-      cy.intercept('POST', '/api/v3/token').as('login')
-      const email = Cypress.env('username')
-      home.login(email, 'failpass123')
+    it('login fail and response is 400 or 401', () => {
+     // const email = Cypress.env('username')
+      home.login(EMAIL, 'failpass123')
       cy.wait('@login').then(({ response }) => {
-        expect(response.statusCode).to.eq(400,401);
+        expect(response.statusCode).to.eq(400, 401);
       });
 
     });
@@ -52,6 +52,10 @@ describe('Home Page Tests', () => {
     cy.scrollTo('top');
     navbar.scrollToAndClickItem('Bajo');
   });
+
+  it.only("Validate autocomplete from search box", () => {
+    home.autoCompleteSearchbox().should('have.text', 'Matemática')
+  })
 
 
 })

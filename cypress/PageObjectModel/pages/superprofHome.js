@@ -1,50 +1,54 @@
-class superprofHome{
+class superprofHome {
 
     //Elementos
-    searchBox(){
+    searchBox() {
         return cy.get('.home-search-form-container')
     }
 
 
-    searchButton(){
-        return cy.contains('button', 'Buscar')
+    searchButton() {
+        return cy.get('.search-header-submit')
     }
 
-    subjectsContainerNext(){
+    subjectsContainerNext() {
         return cy.get('.chevron').eq(1)
     }
 
-    bajoSubject(){
+    bajoSubject() {
         return cy.get('[data-search="Bajo"]')
     }
 
-    conectateForm(){
-         return cy.contains('Conectate') 
+    conectateForm() {
+        return cy.contains('Conectate')
     }
 
-    emailField(){
-        return cy.xpath('//*[@id="signin-form"]/div/div[1]/input')
+    emailField() {
+        return cy.get('[name="username"]').eq(1)
     }
 
-    passwordField(){
+    passwordField() {
         return cy.get('[name="password"]')
     }
 
-     submitButtonLogin(){
+    submitButtonLogin() {
         return cy.contains('Conectate').should('be.visible')
     }
 
-    //Comportamientos
-    navigateToHome(){
-        cy.visit('https://www.superprof.com.ar')
+    autoCompleteBox() {
+        return cy.get('.autocomplete-result-value').first()
     }
 
-    search(toSearch){
+    //Comportamientos
+    navigateToHome() {
+        cy.visit('https://www.superprof.com.ar/', { failOnStatusCode: false });
+    };
+
+    search(toSearch) {
         this.searchBox().click().type(toSearch)
         this.searchButton().click()
     }
 
-    nextClickNavbar(){
+    nextClickNavbar() {
         this.subjectsContainerNext().click()
     }
 
@@ -55,6 +59,12 @@ class superprofHome{
         this.passwordField().type(password)
         this.passwordField().type('{enter}')
     }
+
+    autoCompleteSearchbox() {
+        this.searchBox().click().type("matema", { delay: 100 })
+        return this.autoCompleteBox()
+    }
+
 }
 
 export default superprofHome
