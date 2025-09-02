@@ -11,8 +11,6 @@ describe('Home Page Tests', () => {
     home.navigateToHome()
   })
 
-  const EMAIL = Cypress.env('username');
-
   //Login tests
   describe('Login tests', () => {
     beforeEach(() => {
@@ -20,24 +18,20 @@ describe('Home Page Tests', () => {
     });
 
     it('login ok and response is 200 ', () => {
-     // const email = Cypress.env('username');
-      const password = Cypress.env('password');
 
-      home.login(EMAIL, password)
+      home.login(Cypress.env('username'), Cypress.env('password'))
       cy.wait('@login').then(({ response }) => {
         expect(response.statusCode).to.eq(200);
       });
     });
 
-    it('login fail and response is 400 or 401', () => {
-     // const email = Cypress.env('username')
-      home.login(EMAIL, 'failpass123')
-      cy.wait('@login').then(({ response }) => {
-        expect(response.statusCode).to.eq(400, 401);
-      });
+     it.only('login error and response is 400 ', () => {
 
+      home.login(Cypress.env('username'), 'wrongpass123')
+      cy.wait('@login').its('response.statusCode')
+  .should('be.oneOf', [400, 401]);
     });
-  });
+    });
 
 
   //Front end tests
@@ -53,7 +47,7 @@ describe('Home Page Tests', () => {
     navbar.scrollToAndClickItem('Bajo');
   });
 
-  it.only("Validate autocomplete from search box", () => {
+  it("Validate autocomplete from search box", () => {
     home.autoCompleteSearchbox().should('have.text', 'Matemática')
   })
 
