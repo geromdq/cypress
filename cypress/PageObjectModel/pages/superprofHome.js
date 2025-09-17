@@ -38,6 +38,10 @@ class superprofHome {
         return cy.get('.autocomplete-result-value').first()
     }
 
+    hamburgerMenu(){
+        return cy.get('.interaction-wrapper').first()
+    }
+
     //Comportamientos
     navigateToHome() {
         cy.visit('https://www.superprof.com.ar/', { failOnStatusCode: false });
@@ -64,6 +68,8 @@ class superprofHome {
         this.searchBox().click().type("matema", { delay: 100 })
         return this.autoCompleteBox()
     }
+
+    
 
 }
 

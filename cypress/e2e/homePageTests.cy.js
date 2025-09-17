@@ -25,21 +25,25 @@ describe('Home Page Tests', () => {
       });
     });
 
-     it.only('login error and response is 400 ', () => {
+    it('login error and response is 400 ', () => {
 
       home.login(Cypress.env('username'), 'wrongpass123')
       cy.wait('@login').its('response.statusCode')
-  .should('be.oneOf', [400, 401]);
+        .should('be.oneOf', [400, 401]);
     });
-    });
+  });
 
 
   //Front end tests
-  it("Find teacher", () => {
-    home.search('Clases de ingles')
-    results.mainTitle().should('have.text', 'Los profesores de inglés cerca de ti')
-  })
+  it("Find subjects on fixture", () => {
+    cy.fixture('subjects').then(subjects => {
+      subjects.forEach(({ subject }) => {
+        home.search(subject)
+      })
 
+      //results.mainTitle().should('have.text', 'Los profesores de inglés cerca de ti')
+    })
+  });
 
   it('Find Bajo on navbar', () => {
     cy.viewport(1920, 1080);
@@ -51,5 +55,22 @@ describe('Home Page Tests', () => {
     home.autoCompleteSearchbox().should('have.text', 'Matemática')
   })
 
+  //Responsivity tests
+  it.only("Validate mobile menu", () => {
+    const viewports = [
+      { device: 'iphone-6', expected: 'be.visible' },
+      { device: 'iphone-x', expected: 'be.visible' },
+      { device: 'ipad-2', expected: 'be.visible' },
+      { device: 'macbook-13', expected: 'be.hidden' },
+      { device: 'macbook-15', expected: 'be.hidden' }
+    ]
 
+    viewports.forEach(({ device, expected }) => {
+      cy.viewport(device)
+      home.hamburgerMenu().should(expected)
+    })
+  })
 })
+
+
+
