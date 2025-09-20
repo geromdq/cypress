@@ -31,17 +31,22 @@ describe('Home Page Tests', () => {
       cy.wait('@login').its('response.statusCode')
         .should('be.oneOf', [400, 401]);
     });
+
+    it('verify cookie loading after login', () => {
+      home.login(Cypress.env('username'), Cypress.env('password'))
+      cy.getCookie('PHPSESSID').should('exist')
+    })
   });
 
 
   //Front end tests
-  it("Find subjects on fixture", () => {
+  it.only("Find subjects on fixture", () => {
     cy.fixture('subjects').then(subjects => {
       subjects.forEach(({ subject }) => {
         home.search(subject)
+        results.mainTitle().should('contain.text', subject)
+        home.navigateToHome()
       })
-
-      //results.mainTitle().should('have.text', 'Los profesores de inglés cerca de ti')
     })
   });
 
@@ -56,7 +61,7 @@ describe('Home Page Tests', () => {
   })
 
   //Responsivity tests
-  it.only("Validate mobile menu", () => {
+  it("Validate if mobile menu is displayed", () => {
     const viewports = [
       { device: 'iphone-6', expected: 'be.visible' },
       { device: 'iphone-x', expected: 'be.visible' },
