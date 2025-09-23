@@ -4,6 +4,7 @@ import navbar from '../PageObjectModel/components/navbar'
 
 const home = new superprofHome
 const results = new superprofResults
+
 describe('Home Page Tests', () => {
 
   beforeEach("Navigate to home", () => {
@@ -40,7 +41,7 @@ describe('Home Page Tests', () => {
 
 
   //Front end tests
-  it.only("Find subjects on fixture", () => {
+  it("Find subjects on fixture", () => {
     cy.fixture('subjects').then(subjects => {
       subjects.forEach(({ subject }) => {
         home.search(subject)
@@ -75,6 +76,27 @@ describe('Home Page Tests', () => {
       home.hamburgerMenu().should(expected)
     })
   })
+
+  //Asincronía
+  //Here log prints nothing
+  let toPrint;
+  it.only('This is a bad manage of asynchronicity',()=>{
+     cy.get('.stars-suffix').invoke('text').then((text)=>{
+      toPrint = text;
+     })
+     cy.log(toPrint)
+  })
+
+  
+
+  it.only('this is a good manage of asynchronity',()=>{
+    cy.get('.stars-suffix').invoke('text').then((text)=>{
+      toPrint = text;
+      cy.log(toPrint)
+    })
+  })
+
+  
 })
 
 
